@@ -1,7 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-
+const cors = require("cors");
+const cookieParser = require("cookie-parser")
+const path = require("path")
 require("dotenv").config()
 
 const port = process.env.PORT || 5000;
@@ -16,9 +18,15 @@ const dbConnection = async () =>{
 // middlewars //
 
 app.use(express.json());
-
-const userRouter = require("./routes/user.router")
-app.use(userRouter)
+app.use(cookieParser())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
+console.log(path.join(__dirname,"../uploads"))
+app.use("/api/uploads",express.static("./uploads"))
+const routes = require("./routes")
+app.use("/api", routes)
 
 
 app.listen(port,()=>{

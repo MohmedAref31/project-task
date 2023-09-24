@@ -1,15 +1,9 @@
 const router = require("express").Router();
-const {register} = require("../controllers/auth")
-const {login} = require("../controllers/auth")
 
-const registerValidate = require("../middlewares/validation.middelware.js").registerValitate;
-const loginValidate = require("../middlewares/validation.middelware.js").loginValitate;
+const {isLogedin,logout} = require("../controllers/user.controller")
 
-router.post("/user",registerValidate, register);
-
-router.post("/login",loginValidate, login)
+router.get("/isLogedin", isLogedin)
+router.post('/logout',logout)
 
 
 module.exports = router
-
-

@@ -1,38 +1,32 @@
 const mongoose = require("mongoose");
-const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
-    username :{
+    fullname :{
         type:String,
         required:true,
-        unique:true,
         trim:true,
         lowercase:true,
-        minlength:6,
-        maxlength:12
     },
     email:{
         type:String,
         unique:true,
         lowercase:true,
-        validate(v){
-            const isEmail = validator.isEmail(v);
-
-            if(!isEmail)
-                throw new Error("please enter a valid email")
-        }
     },
     password:{
         type:String,
-        minlength:8,
         trim:true,
        
     },
     tokens:[{
-        type:String
-    }]
+        type:String,
+        expires:"1d"
+    }],
+    isAdmin:{
+        type:Boolean,
+        default:false
+    }
 })
 
 userSchema.pre("save",async function (){
@@ -48,12 +42,12 @@ userSchema.statics.login = async (email , password)=>{
 
     console.log(user)
     if(!user)
-        throw new Error("email is wrong");
+        throw new Error("email or password is wrong");
 
     const compare  = await bcrypt.compare(password, user.password);
 
     if(!compare)
-        throw new Error("password is wrong")
+        throw new Error("email or password is wrong")
 
     return user
 }
