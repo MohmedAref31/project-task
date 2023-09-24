@@ -23,9 +23,9 @@ app.use(cors({
     origin:"http://localhost:5173",
     credentials:true
 }))
-console.log(path.join(__dirname,"../uploads"))
-app.use("/api/uploads",express.static("./uploads"))
-const routes = require("./routes")
+// console.log(path.join(__dirname,"/uploads"))
+app.use("/api/uploads",express.static("./src/uploads"))
+const routes = require("./src/routes")
 app.use("/api", routes)
 
 
